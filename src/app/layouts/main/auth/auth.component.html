@@ -1,0 +1,43 @@
+<div class="connexion">
+  <div class="connexion2">
+  </div>
+  <div class="connexion1">
+    <h1>connexion</h1>
+    <div class="main con">
+      <form class="formulaireConnexion col-10 d-block container-fluid card-body  " [formGroup]="connexionForm" (ngSubmit)="onSubmit()">
+        <div class="form-group d-flex flex-md-column mb-2">
+          <input
+            type="email"
+            class="form-control"
+            id="email"
+            placeholder="Email"
+            formControlName="email"
+            [ngClass]="{ 'is-invalid': submitted && f['email'].errors }"
+            aria-required="true"
+            aria-describedby="emailHelp"
+          />
+          <div *ngIf="(f['email'].dirty || f['email'].touched) && f['email'].errors" class="errors">
+            <span *ngIf="f['email'].errors?.['required']">Email is required</span>
+            <span *ngIf="f['email'].errors?.['email']">Email is invalid</span>
+          </div>
+        </div>
+        <div class="form-group d-flex flex-md-column">
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            placeholder="Password"
+            formControlName="password"
+            [ngClass]="{ 'is-invalid': submitted && f['password'].errors }"
+            aria-required="true"
+          />
+          <div *ngIf="(f['password'].dirty || f['password'].touched) && f['password'].errors" class="errors">
+            <span *ngIf="f['password'].errors?.['required']">Password is required</span>
+            <span *ngIf="f['password'].errors?.['minlength']">Password is too short</span>
+          </div>
+        </div>
+        <button type="submit" class="btn w-100 mt-4">connexion</button>
+      </form>
+    </div>
+  </div>
+</div>

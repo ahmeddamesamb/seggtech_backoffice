@@ -1,0 +1,34 @@
+header{
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  height: 60px;
+  width: 100%;
+  background-color: #3d7814;
+}
+
+header :nth-child(1){
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+}
+header :nth-child(2){
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+header :nth-child(3){
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+

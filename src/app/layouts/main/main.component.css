@@ -1,0 +1,19 @@
+main{
+  display: flex;
+  flex: 5;
+  background-color: #f2f2f2;
+  height: 87vh;
+  flex-direction: column;
+}
+.main-recherch{
+  height: 10vh ;
+  border: 2px solid ;
+  display:flex;
+  justify-content: space-between;
+}
+.main-recherch span{
+  height: 10vh ;
+  border: 2px solid ;
+  display:flex;
+}
+

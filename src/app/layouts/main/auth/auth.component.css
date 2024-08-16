@@ -1,0 +1,47 @@
+.connexion {
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
+  height: 97vh;
+}
+
+.connexion1{
+  display: flex;
+  flex-direction: column;
+  border: 3px solid #438316;
+  flex:1;
+}
+.connexion2{
+  display: flex;
+  flex-direction: column;
+  flex:1;
+  background-image: url('/assets/images/logo_contour_RS.png');
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+.connexion1 :nth-child(1){
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #438316;
+  flex: 1;
+}
+.btn{
+  background-color: #438316;
+  color: white;
+
+}
+.connexion1 :nth-child(2){
+  display: flex;
+  flex: 4;
+}
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  max-width: 400px;
+  margin: auto;
+}
+

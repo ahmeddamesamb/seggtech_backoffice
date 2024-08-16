@@ -1,0 +1,35 @@
+<main>
+  <div class="main-recherch">
+    <span></span>
+    <span class="justify-content-center align-items-center">
+  <button type="submit" class="btn w-100 mt-4"nnt>Add User</button>
+</span>
+
+  </div>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">No</th>
+      <th scope="col">Email</th>
+      <th scope="col">Nom</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let user of paginatedUsers; let i = index">
+      <th scope="row">{{ i + 1 + (page - 1) * pageSize }}</th>
+      <td>{{ user.email }}</td>
+      <td>{{ user.nom }}</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <div class="d-flex justify-content-center p-2 align-items-center">
+    <ngb-pagination
+      [collectionSize]="collectionSize"
+      [(page)]="page"
+      [pageSize]="pageSize"
+      (pageChange)="refreshUsers()"
+    >
+    </ngb-pagination>
+  </div>
+</main>
