@@ -1,17 +1,82 @@
 <main>
   <div class="main-recherch">
-    <span></span>
-    <span class="justify-content-center align-items-center">
-  <button type="submit" class="btn w-100 mt-4"nnt>Add User</button>
-</span>
+    <span>
+      <i class="pi pi-history" style="font-size: 1.5rem"></i>
+    </span>
+    <span>
+      <p-iconField iconPosition="left">
+        <p-inputIcon styleClass="pi pi-search" />
+        <input type="text" pInputText placeholder="Search"
+              [(ngModel)]="filters.email"
+              [(ngModel)]="filters.nom"
+               (input)="filterData()"
+        />
+      </p-iconField>
+    </span>
+  <span>
+        <button
+          pButton
+          pRipple
+          label="ajouter utilisateur"
+          class="p-button-success" (click)="openAddUserPopup()">
+    </button>
+  </span>
+  </div>
 
+  <div *ngIf="showAddUserForm" class="popup-overlay  row-cols-xxl-4 d-flex w-100">
+    <div class="popup-content">
+      <h2 class="d-flex justify-content-center align-items-center">Ajoute Utilisateur</h2>
+      <form (ngSubmit)="createUser()" class="form-check-inline justify-content-center align-items-center d-flex flex-column m-5">
+        <p-floatLabel class="form-group mb-4">
+          <input id="nom" type="text" pInputText [(ngModel)]="newUser.nom" />
+          <label for="nom">Nom</label>
+        </p-floatLabel>
+        <p-floatLabel class="form-group mb-4">
+          <input id="email" type="text" pInputText [(ngModel)]="newUser.email" />
+          <label for="email">Email</label>
+        </p-floatLabel>
+        <p-floatLabel class="form-group mb-4">
+          <input id="password" type="password" pInputText [(ngModel)]="newUser.password" />
+          <label for="password">Password</label>
+        </p-floatLabel>
+        <div class="btn-group">
+          <button class="btn btn-danger" type="button" (click)="closeAddUserPopup()">Cancel</button>
+          <button class="btn btn-dark " type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="showAddUserForm" class="popup-overlay  row-cols-xxl-4 d-flex w-100">
+    <div class="popup-content">
+      <h2 class="d-flex justify-content-center align-items-center">Ajoute Utilisateur</h2>
+      <form (ngSubmit)="createUser()" class="form-check-inline justify-content-center align-items-center d-flex flex-column m-5">
+        <p-floatLabel class="form-group mb-4">
+          <input id="nom" type="text" pInputText [(ngModel)]="newUser.nom" />
+          <label for="nom">Nom</label>
+        </p-floatLabel>
+        <p-floatLabel class="form-group mb-4">
+          <input id="email" type="text" pInputText [(ngModel)]="newUser.email" />
+          <label for="email">Email</label>
+        </p-floatLabel>
+        <p-floatLabel class="form-group mb-4">
+          <input id="password" type="password" pInputText [(ngModel)]="newUser.password" />
+          <label for="password">Password</label>
+        </p-floatLabel>
+        <div class="btn-group">
+          <button class="btn btn-danger" type="button" (click)="closeAddUserPopup()">Cancel</button>
+          <button class="btn btn-dark " type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
   </div>
   <table class="table table-striped">
     <thead>
-    <tr>
+    <tr >
       <th scope="col">No</th>
       <th scope="col">Email</th>
       <th scope="col">Nom</th>
+      <th scope="col" class="d-flex justify-content-center align-items-center">etat</th>
     </tr>
     </thead>
     <tbody>
@@ -19,6 +84,14 @@
       <th scope="row">{{ i + 1 + (page - 1) * pageSize }}</th>
       <td>{{ user.email }}</td>
       <td>{{ user.nom }}</td>
+      <td class="d-flex justify-content-evenly align-items-center">
+        <span>
+          <i class="pi pi-pencil pi-cog" style="font-size: 1rem"></i>
+        </span>
+        <span class="d-flex justify-content-center align-items-center">
+          <i class="pi pi-times-circle pi-cog" style="font-size: 1rem"></i>
+        </span>
+      </td>
     </tr>
     </tbody>
   </table>
@@ -29,7 +102,6 @@
       [(page)]="page"
       [pageSize]="pageSize"
       (pageChange)="refreshUsers()"
-    >
-    </ngb-pagination>
+    ></ngb-pagination>
   </div>
 </main>

@@ -4,15 +4,23 @@ import { FormsModule } from "@angular/forms";
 import { NgbPaginationModule } from "@ng-bootstrap/ng-bootstrap";
 import { UserService } from "../services/user.service";
 import { Iuser } from "../models/iuser";
-import {filter} from "rxjs";
-
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { ButtonModule } from 'primeng/button';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { InputTextModule } from 'primeng/inputtext';
 @Component({
   selector: 'app-main',
   standalone: true,
   imports: [
     CommonModule,
     FormsModule,
-    NgbPaginationModule
+    NgbPaginationModule,
+    FloatLabelModule,
+    ButtonModule,
+    IconFieldModule,
+    InputIconModule,
+    InputTextModule
   ],
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.css']
@@ -22,16 +30,34 @@ export class MainComponent implements OnInit {
   filteredUsers: Iuser[] = [];
   user: Iuser | undefined;
   filters: { email?: string; nom?: string } = {};
-
   paginatedUsers: Iuser[] = [];
   pageSize = 9;
   page = 1;
   collectionSize = 0;
+  showAddUserForm = false;
+
+  // New user data
+  newUser: Iuser = {
+    nom: '',
+    email: '',
+    password: ''
+  };
 
   constructor(private userService: UserService) {}
 
   ngOnInit() {
     this.getAllUsers();
+  }
+
+  openAddUserPopup() {
+    this.showAddUserForm = true;
+  }
+  openUpdateUserPopup() {
+    this.showAddUserForm = true;
+  }
+
+  closeAddUserPopup() {
+    this.showAddUserForm = false;
   }
 
   getAllUsers() {
@@ -43,14 +69,21 @@ export class MainComponent implements OnInit {
 
   filterData(): void {
     this.filteredUsers = this.users.filter((user) => {
-      return (
-        (!this.filters.nom || this.filters.nom.toUpperCase().includes(this.filters.nom.toUpperCase())) &&
-        (!this.filters.email || this.filters.email.toUpperCase().includes(this.filters.email.toUpperCase()))
-      );
+      const nomMatches = this.filters.nom
+        ? user.nom?.toUpperCase().includes(this.filters.nom.toUpperCase())
+        : true;
+
+      const emailMatches = this.filters.email
+        ? user.email?.toUpperCase().includes(this.filters.email.toUpperCase())
+        : true;
+
+      return nomMatches && emailMatches;
     });
+
     this.collectionSize = this.filteredUsers.length;
     this.refreshUsers();
   }
+
 
   getOneUser(id: number) {
     this.userService.getUserById(id).subscribe((data) => {
@@ -58,14 +91,18 @@ export class MainComponent implements OnInit {
       console.warn("get One user:", this.user);
     });
   }
-createUser(user:Iuser){
-  this.userService.saveUser(user).subscribe(() => {
-    this.user; // Refresh the list after deletion
-  });
-}
+
+  createUser() {
+    this.userService.saveUser(this.newUser).subscribe(() => {
+      this.getAllUsers(); // Refresh the list after adding a user
+      this.closeAddUserPopup(); // Close the popup after creating a user
+      this.newUser = { nom: '', email: '' }; // Reset the form
+    });
+  }
+
   deleteUser(id: number) {
     this.userService.deleteUser(id).subscribe(() => {
-      this.user; // Refresh the list after deletion
+      this.getAllUsers(); // Refresh the list after deletion
     });
   }
 

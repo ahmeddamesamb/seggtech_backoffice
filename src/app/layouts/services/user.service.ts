@@ -22,6 +22,7 @@ export class UserService {
   }
 
   saveUser(user: Iuser): Observable<Iuser> {
+    console.warn(user)
     return this.http.post<Iuser>(this.apiUrl, user).pipe(
       tap(newUser => console.log('Added user:', newUser)),
       catchError(this.handleError)
