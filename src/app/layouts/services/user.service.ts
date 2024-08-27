@@ -29,20 +29,25 @@ export class UserService {
     );
   }
 
-  getUserById(id: number): Observable<Iuser> {
+  getUserById(id?: number): Observable<Iuser> {
     return this.http.get<Iuser>(`${this.apiUrl}/${id}`).pipe(
       tap(user => console.log('Fetched user:', user)),
       catchError(this.handleError)
     );
   }
 
-  updateUser(id: number, user: Iuser): Observable<Iuser> {
+  updateUser(id?: number, user?: Iuser): Observable<Iuser> {
     return this.http.put<Iuser>(`${this.apiUrl}/${id}`, user).pipe(
       tap(updatedUser => console.log('Updated user:', updatedUser)),
       catchError(this.handleError)
     );
   }
-
+  archiveUser(id?:number):Observable<any>{
+    return this.http.put<any>(`${this.apiUrl}/${id}/archive`,{is_active: false});
+  }
+  activateUser(id?: number): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${id}/activate`, {is_active: true});
+  }
   deleteUser(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       tap(() => console.log('Deleted user with id:', id)),
@@ -54,5 +59,9 @@ export class UserService {
   private handleError(error: HttpErrorResponse) {
     console.error('An error occurred:', error.message);
     return throwError('Something went wrong; please try again later.');
+  }
+  private detailUser(){
+    this.getUserById();
+    console.log(this.getUserById())
   }
 }

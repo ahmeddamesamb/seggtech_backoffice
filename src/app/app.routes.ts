@@ -3,21 +3,31 @@ import { AuthComponent } from "./layouts/main/auth/auth.component";
 import { MainComponent } from "./layouts/main/main.component";
 import { HomeComponent } from "./layouts/main/home/home.component";
 import { HeaderComponent } from "./layouts/header/header/header.component";
+import {authGuard } from './layouts/guard/auth.guard';
+import { UserDetailComponent } from './layouts/main/user-detail/user-detail.component';
 
 export const routes: Routes = [
   {
     path: '', component: AuthComponent
   },
   {
-    path: 'home', component: HomeComponent
+    path: 'home', component: HomeComponent,
+    canActivate: [authGuard]
+  },
+  { path: 'user-detail/:id', component: UserDetailComponent
+    // canActivate: [authGuard]
   },
   {
-    path: 'header', component: HeaderComponent
+    path: 'header', component: HeaderComponent,
+    canActivate: [authGuard]
   },
   {
-    path: 'main', component: MainComponent
+    path: 'main', component: MainComponent,
+    canActivate: [authGuard]
   },
   {
-    path: '**', component: AuthComponent
+    path: '**', component: AuthComponent,
+    pathMatch: "full",
+    redirectTo: ''
   }
 ];

@@ -1,95 +1,124 @@
 <main>
+  <!--  RECHERCHE PAR NOM PAR EMAIL-->
   <div class="main-recherch">
-    <span>
+    <span (click)="getArchivedUsers()">
       <i class="pi pi-history" style="font-size: 1.5rem"></i>
     </span>
     <span>
       <p-iconField iconPosition="left">
-        <p-inputIcon styleClass="pi pi-search" />
+        <p-inputIcon styleClass="pi pi-search"></p-inputIcon>
         <input type="text" pInputText placeholder="Search"
-              [(ngModel)]="filters.email"
-              [(ngModel)]="filters.nom"
+               [(ngModel)]="filters.email"
                (input)="filterData()"
-        />
+               [(ngModel)]="filters.nom"
+               (input)="filterData()" />
       </p-iconField>
     </span>
-  <span>
-        <button
-          pButton
-          pRipple
-          label="ajouter utilisateur"
-          class="p-button-success" (click)="openAddUserPopup()">
-    </button>
-  </span>
+    <span>
+      <button pButton pRipple label="Ajouter utilisateur"
+              class="p-button-success"
+              (click)="openAddUserPopup()"></button>
+    </span>
   </div>
+  <div *ngIf="showArchivedUsersCard" class="card mt-4">
+    <div class="card-header">
+      <h5>Utilisateurs Inactifs</h5>
+    </div>
+    <div class="card-body">
+      <div *ngFor="let user of inactiveUsers" class="mb-2">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <strong>{{ user.nom }}</strong> - {{ user.email }}
+          </div>
+          <button class="btn btn-success btn-sm" (click)="activateUser(user.id)">
+            Activer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  CARD USERBY ID-->
+<!--  <p-card *ngIf="showCard" header="Détails de l'utilisateur">-->
+<!--    <p class="m-0">-->
+<!--      <strong>Nom:</strong> {{ selectedUser.nom }} <br />-->
+<!--      <strong>Email:</strong> {{ selectedUser.email }} <br />-->
+<!--      &lt;!&ndash; Ajoutez d'autres détails ici si nécessaire &ndash;&gt;-->
+<!--    </p>-->
+<!--  </p-card>-->
 
-  <div *ngIf="showAddUserForm" class="popup-overlay  row-cols-xxl-4 d-flex w-100">
+  <!-- POP UP AJOUTER UTILISATEUR -->
+  <div *ngIf="showAddUserForm" class="popup-overlay row-cols-xxl-4 d-flex">
     <div class="popup-content">
-      <h2 class="d-flex justify-content-center align-items-center">Ajoute Utilisateur</h2>
+      <h2 class="d-flex justify-content-center align-items-center">Ajouter Utilisateur</h2>
       <form (ngSubmit)="createUser()" class="form-check-inline justify-content-center align-items-center d-flex flex-column m-5">
         <p-floatLabel class="form-group mb-4">
-          <input id="nom" type="text" pInputText [(ngModel)]="newUser.nom" />
+          <input id="nom" type="text" pInputText [(ngModel)]="newUser.nom" name="nom" required />
           <label for="nom">Nom</label>
         </p-floatLabel>
         <p-floatLabel class="form-group mb-4">
-          <input id="email" type="text" pInputText [(ngModel)]="newUser.email" />
+          <input id="email" type="email" pInputText [(ngModel)]="newUser.email" name="email" required />
           <label for="email">Email</label>
         </p-floatLabel>
         <p-floatLabel class="form-group mb-4">
-          <input id="password" type="password" pInputText [(ngModel)]="newUser.password" />
+          <input id="password" type="password" pInputText [(ngModel)]="newUser.password" name="password" required />
           <label for="password">Password</label>
         </p-floatLabel>
         <div class="btn-group">
-          <button class="btn btn-danger" type="button" (click)="closeAddUserPopup()">Cancel</button>
-          <button class="btn btn-dark " type="submit">Submit</button>
+          <button class="btn btn-danger" type="button" (click)="closeUpdateUserPopup()">Cancel</button>
+          <button class="btn btn-dark" type="submit">Submit</button>
         </div>
       </form>
     </div>
   </div>
 
-  <div *ngIf="showAddUserForm" class="popup-overlay  row-cols-xxl-4 d-flex w-100">
+  <!-- POP UP UPDATEUTER UTILISATEUR -->
+  <div *ngIf="showUpdateUserForm" class="popup-overlay row-cols-xxl-4 d-flex">
     <div class="popup-content">
-      <h2 class="d-flex justify-content-center align-items-center">Ajoute Utilisateur</h2>
-      <form (ngSubmit)="createUser()" class="form-check-inline justify-content-center align-items-center d-flex flex-column m-5">
+      <h2 class="d-flex justify-content-center align-items-center">Ajouter Utilisateur</h2>
+      <form (ngSubmit)="updateUser(newUser.id, newUser)" class="form-check-inline justify-content-center align-items-center d-flex flex-column m-5">
         <p-floatLabel class="form-group mb-4">
-          <input id="nom" type="text" pInputText [(ngModel)]="newUser.nom" />
+          <input id="nom" type="text" pInputText [(ngModel)]="user.nom" name="nom" required />
           <label for="nom">Nom</label>
         </p-floatLabel>
         <p-floatLabel class="form-group mb-4">
-          <input id="email" type="text" pInputText [(ngModel)]="newUser.email" />
+          <input id="email" type="email" pInputText [(ngModel)]="user.email" name="email" required />
           <label for="email">Email</label>
         </p-floatLabel>
         <p-floatLabel class="form-group mb-4">
-          <input id="password" type="password" pInputText [(ngModel)]="newUser.password" />
+          <input id="password" type="password" pInputText [(ngModel)]="user.password" name="password" required />
           <label for="password">Password</label>
         </p-floatLabel>
         <div class="btn-group">
           <button class="btn btn-danger" type="button" (click)="closeAddUserPopup()">Cancel</button>
-          <button class="btn btn-dark " type="submit">Submit</button>
+          <button class="btn btn-dark" type="submit">Submit</button>
         </div>
       </form>
     </div>
   </div>
+  <!-- TABLE USERS ET SES INFOS -->
   <table class="table table-striped">
     <thead>
-    <tr >
+    <tr>
       <th scope="col">No</th>
       <th scope="col">Email</th>
       <th scope="col">Nom</th>
-      <th scope="col" class="d-flex justify-content-center align-items-center">etat</th>
+      <th scope="col" class="d-flex justify-content-center align-items-center">État</th>
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let user of paginatedUsers; let i = index">
+    <tr *ngFor="let user of paginatedUsers; let i = index" >
       <th scope="row">{{ i + 1 + (page - 1) * pageSize }}</th>
       <td>{{ user.email }}</td>
       <td>{{ user.nom }}</td>
       <td class="d-flex justify-content-evenly align-items-center">
-        <span>
-          <i class="pi pi-pencil pi-cog" style="font-size: 1rem"></i>
+        <span (click)="navigateToUserDetail(user.id)">
+          <i class="pi pi-pencil pi-cog" style="font-size: 1rem"  ></i>
         </span>
-        <span class="d-flex justify-content-center align-items-center">
-          <i class="pi pi-times-circle pi-cog" style="font-size: 1rem"></i>
+        <span (click)="updateUser(user.id,user)">
+          <i class="pi pi-upload pi-cog" style="font-size: 1rem" (click)="openUpdateUserPopup()"></i>
+        </span>
+        <span class="d-flex justify-content-center align-items-center" (click)="archiveUser(user.id)">
+          <i class="pi pi-trash pi-cog" style="font-size: 1rem" color="red"></i>
         </span>
       </td>
     </tr>
@@ -97,11 +126,10 @@
   </table>
 
   <div class="d-flex justify-content-center p-2 align-items-center">
-    <ngb-pagination
-      [collectionSize]="collectionSize"
-      [(page)]="page"
-      [pageSize]="pageSize"
-      (pageChange)="refreshUsers()"
-    ></ngb-pagination>
+    <ngb-pagination [collectionSize]="collectionSize"
+                    [(page)]="page"
+                    [pageSize]="pageSize"
+                    (pageChange)="refreshUsers()">
+    </ngb-pagination>
   </div>
 </main>

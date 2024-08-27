@@ -8,6 +8,7 @@ import { environment } from '../../environment/environment';
   providedIn: 'root'
 })
 export class AuthService {
+
   private userSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
   public user$ = this.userSubject.asObservable();
 
@@ -28,31 +29,40 @@ export class AuthService {
       .pipe(
         catchError((error) => {
           console.error('Login failed', error);
-          throw error;
+          throw error; // Vous pourriez aussi renvoyer une observable vide ou un message d'erreur.
         })
       )
       .subscribe(
         (data) => {
-          console.warn('Token:', data.token);
-          localStorage.setItem('token', data.token);
-          localStorage.setItem('refresh', data.refresh);
-          localStorage.setItem('user', JSON.stringify(data.user));
-          this.userSubject.next(data.user);
-          console.warn('Current user:', this.userSubject.value);
-          this.router.navigateByUrl('/home').then(success => {
-            if (!success) {
-              console.error('La redirection vers la page d\'accueil a échoué');
-            }
-          });
+          if (data && data.token) {
+            console.warn('Token:', data.token);
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('refresh', data.refresh);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            this.userSubject.next(data.user);
+            this.router.navigateByUrl('/home').then(success => {
+              if (!success) {
+                console.error('La redirection vers la page d\'accueil a échoué');
+              }
+            }).catch((error) => {
+              console.error('Erreur lors de la redirection', error);
+            });
+          } else {
+            console.error('Les données de la réponse sont incorrectes ou incomplètes', data);
+          }
         }
       );
   }
+
 
   logout():void {
     this.http.post(`${environment.apiUrl}/logout`, {});
     localStorage.removeItem('token');
     localStorage.removeItem('user');
     this.userSubject.next(null);
-    this.router.navigateByUrl('/login');
+    this.router.navigateByUrl('');
+  }
+  isAuthenticated(): boolean {
+    return !localStorage.getItem("token");
   }
 }
