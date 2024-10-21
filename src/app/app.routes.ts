@@ -1,10 +1,10 @@
-import { Routes } from '@angular/router';
-import { AuthComponent } from "./layouts/main/auth/auth.component";
-import { MainComponent } from "./layouts/main/main.component";
-import { HomeComponent } from "./layouts/main/home/home.component";
-import { HeaderComponent } from "./layouts/header/header/header.component";
-import {authGuard } from './layouts/guard/auth.guard';
-import { UserDetailComponent } from './layouts/main/user-detail/user-detail.component';
+import {Routes} from '@angular/router';
+import {AuthComponent} from "./layouts/main/auth/auth.component";
+import {MainComponent} from "./layouts/main/main.component";
+import {HomeComponent} from "./layouts/main/home/home.component";
+import {HeaderComponent} from "./layouts/header/header/header.component";
+import {authGuard} from './layouts/guard/auth.guard';
+import {UserDetailComponent} from './layouts/main/user-detail/user-detail.component';
 
 export const routes: Routes = [
   {
@@ -14,8 +14,9 @@ export const routes: Routes = [
     path: 'home', component: HomeComponent,
     canActivate: [authGuard]
   },
-  { path: 'user-detail/:id', component: UserDetailComponent
-    // canActivate: [authGuard]
+  {
+    path: 'user-detail/:id', component: UserDetailComponent,
+    canActivate: [authGuard]  // Si c'était désactivé temporairement, active-le ici
   },
   {
     path: 'header', component: HeaderComponent,
@@ -26,8 +27,6 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
-    path: '**', component: AuthComponent,
-    pathMatch: "full",
-    redirectTo: ''
+    path: '**', redirectTo: ''  // Redirection par défaut vers l'authentification
   }
 ];

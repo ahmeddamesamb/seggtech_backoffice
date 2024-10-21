@@ -1,9 +1,10 @@
 export interface Icapteur {
-    temperature : number;
-    tds : number;
-    turbidite : number;
-    ph : number;
-    conductivite : number;
-    oxygene : number;
+  id: number;
+  temperature: number;
+  tds: number;
+  turbidite: number;
+  ph: number;
+  conductivite: number;
+  oxygene: number;
 
 }

@@ -1,4 +1,4 @@
-export const environment={
-  production:false,
-  apiUrl: 'http://127.0.0.1:8000/api' // Modifiez selon l'URL de votre API
+export const environment = {
+  production: false,
+  apiUrl: 'http://192.168.1.49:8000/api'
 }

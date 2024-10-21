@@ -1,16 +1,17 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { NgbPaginationModule } from "@ng-bootstrap/ng-bootstrap";
-import { UserService } from "../services/user.service";
-import { Iuser } from "../models/iuser";
-import { FloatLabelModule } from 'primeng/floatlabel';
-import { ButtonModule } from 'primeng/button';
-import { IconFieldModule } from 'primeng/iconfield';
-import { InputIconModule } from 'primeng/inputicon';
-import { InputTextModule } from 'primeng/inputtext';
-import { CardModule } from 'primeng/card';
-import { ActivatedRoute, Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from "@angular/common";
+import {FormsModule} from "@angular/forms";
+import {NgbPaginationModule} from "@ng-bootstrap/ng-bootstrap";
+import {UserService} from "../services/user.service";
+import {FloatLabelModule} from 'primeng/floatlabel';
+import {ButtonModule} from 'primeng/button';
+import {IconFieldModule} from 'primeng/iconfield';
+import {InputIconModule} from 'primeng/inputicon';
+import {InputTextModule} from 'primeng/inputtext';
+import {CardModule} from 'primeng/card';
+import {ActivatedRoute, Router} from '@angular/router';
+import {IUser} from "../models/iuser";
+import {SharedService} from "../services/shared.service";
 
 @Component({
   selector: 'app-main',
@@ -30,11 +31,11 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent implements OnInit {
-  users: Iuser[] = [];
-  filteredUsers: Iuser[] = [];
-  paginatedUsers: Iuser[] = [];
-  inactiveUsers: Iuser[] = []; // Utilisateurs inactifs
-  user: Iuser | any;
+  users: IUser[] = [];
+  filteredUsers: IUser[] = [];
+  paginatedUsers: IUser[] = [];
+  inactiveUsers: IUser[] = [];
+  user: IUser | any;
   filters: { email?: string; nom?: string } = {};
   pageSize = 9;
   page = 1;
@@ -42,17 +43,19 @@ export class MainComponent implements OnInit {
   showAddUserForm = false;
   showUpdateUserForm = false;
   showCardUser = false;
-  showArchivedUsers = false; // Afficher ou non les utilisateurs archivés
-  showArchivedUsersCard = false; // Contrôle de l'affichage du Card des utilisateurs inactifs
+  showArchivedUsers = false;
+  showArchivedUsersCard = false;
   userId: number | undefined;
 
-  newUser: Iuser = {
+  newUser: IUser = {
     nom: '',
     email: '',
-    password: ''
+    password: '',
+    telephone: '' // Ajout du champ telephone requis
   };
 
-  constructor(private userService: UserService, private route: ActivatedRoute, private router: Router) {}
+  constructor(private userService: UserService, private sharedService: SharedService, private route: ActivatedRoute, private router: Router) {
+  }
 
   ngOnInit() {
     this.getAllUsers();
@@ -82,22 +85,28 @@ export class MainComponent implements OnInit {
   getAllUsers() {
     this.userService.getAllUsers().subscribe((data) => {
       this.users = data.filter(user => user.is_active);
-      this.filterData();
+      this.filteredUsers = this.users;
+      this.collectionSize = this.filteredUsers.length;
+      this.refreshUsers();
     });
   }
+
 
   getArchivedUsers() {
     this.userService.getAllUsers().subscribe((data) => {
       this.inactiveUsers = data.filter(user => !user.is_active);
-      this.showArchivedUsersCard = true; // Affiche le Card
-      
+      console.warn(this.inactiveUsers)
+      // this.sharedService.booleanState$.subscribe((state: boolean) => {
+      //   this.showArchivedUsersCard = state;
+      // })
+      // this.showArchivedUsersCard = true;
     });
   }
 
   activateUser(id?: number) {
     this.userService.activateUser(id).subscribe(() => {
-      this.getAllUsers(); // Rafraîchir la liste des utilisateurs actifs après activation
-      this.getArchivedUsers(); // Rafraîchir la liste des utilisateurs inactifs après activation
+      this.getAllUsers();
+      this.getArchivedUsers();
     });
   }
 
@@ -122,10 +131,12 @@ export class MainComponent implements OnInit {
   }
 
   createUser() {
+    alert('Événement "Ajouter Utilisateur" reçu dans MainComponent');
+    console.log('Événement "Ajouter Utilisateur" reçu dans MainComponent');
     this.userService.saveUser(this.newUser).subscribe(() => {
       this.getAllUsers();
       this.closeAddUserPopup();
-      this.newUser = { nom: '', email: '', password: '' };
+      this.newUser = {nom: '', email: '', password: '', telephone: ''};
     });
   }
 
@@ -141,7 +152,7 @@ export class MainComponent implements OnInit {
     });
   }
 
-  updateUser(id?: number, user?: Iuser) {
+  updateUser(id?: number, user?: IUser) {
     this.userService.updateUser(id, user).subscribe(() => {
       this.getAllUsers();
     });
@@ -149,7 +160,7 @@ export class MainComponent implements OnInit {
 
   navigateToUserDetail(userId?: number): void {
     this.userService.getUserById(userId).subscribe(
-      (data: Iuser) => {
+      (data: IUser) => {
         this.user = data;
         this.router.navigate(['/user-detail', userId]);
       },

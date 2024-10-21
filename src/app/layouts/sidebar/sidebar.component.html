@@ -1,0 +1,25 @@
+<div class="sidebar">
+  <ul class="nav flex-column justify-content-center align-content-center ">
+    <!-- Icône et Logout -->
+    <li class="nav-item">
+      <a (click)="onLogout()" class="nav-link" href="#">
+        <i class="pi pi-pencil pi-lock" style="font-size: 1rem"></i> Logout
+      </a>
+    </li>
+
+    <!-- Icône et Historique -->
+    <li (click)="archiveUser()" class="nav-item">
+      <a class="nav-link">
+        <i class="pi pi-pencil pi-history " style="font-size: 1rem"></i> Historique
+      </a>
+    </li>
+
+    <!-- Icône et Ajouter Utilisateur -->
+    <li (click)="createUser()" class="nav-item">
+      <a class="nav-link">
+        <i class="pi pi-pencil pi-cog" style="font-size: 1rem"></i> Ajouter Utilisateur
+      </a>
+    </li>
+  </ul>
+
+</div>

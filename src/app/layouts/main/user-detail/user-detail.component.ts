@@ -1,28 +1,31 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {HeaderComponent} from "../../header/header/header.component";
-import { UserService } from '../../services/user.service';
-import { Iuser } from '../../models/iuser';
+import {UserService} from '../../services/user.service';
+import {IUser} from '../../models/iuser';
 
 @Component({
   selector: 'app-user-detail',
   standalone: true,
-  imports:  [
+  imports: [
     HeaderComponent,
   ],
   templateUrl: './user-detail.component.html',
   styleUrl: './user-detail.component.css'
 })
 export class UserDetailComponent {
-  user:  any;
+  user: any;
   userId? = 1;
+
   constructor(private userService: UserService) {
-}
+  }
+
   ngOnInit(): void {
     this.loadUser();
   }
+
   loadUser(): void {
     this.userService.getUserById(this.userId).subscribe(
-      (data: Iuser) => {
+      (data: IUser) => {
         this.user = data;
       },
       (error) => {

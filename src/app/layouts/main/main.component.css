@@ -1,46 +1,59 @@
-main{
+main {
   display: flex;
-  flex: 5;
   background-color: #f2f2f2;
-  height: 87vh;
   flex-direction: column;
-}
-.main-recherch{
-  height: 10vh ;
-  display:flex;
-  justify-content: space-between;
-}
-.main-recherch span{
-  height: 10vh ;
-  display:flex;
-}
-.main-recherch :nth-child(1){
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-.main-recherch :nth-child(2){
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  overflow: hidden;
+
 }
 
-.popup-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 500px;
+td img {
+  width: 50px; /* Ajuste la taille selon tes besoins */
+  height: 50px; /* Même valeur que la largeur pour un cercle parfait */
+  border-radius: 50%; /* Pour rendre l'image circulaire */
+  object-fit: cover; /* Pour s'assurer que l'image s'adapte bien au conteneur sans être déformée */
+  border: 2px solid #24735b;
 }
+
+/*.main-recherch {*/
+/*  height: 10vh;*/
+/*  display: flex;*/
+/*  justify-content: space-between;*/
+/*}*/
+
+/*.main-recherch span {*/
+/*  height: 10vh;*/
+/*  display: flex;*/
+/*}*/
+
+/*.main-recherch :nth-child(1) {*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*  align-items: center;*/
+/*}*/
+
+/*.main-recherch :nth-child(2) {*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*  align-items: center;*/
+/*}*/
+
+/*.popup-overlay {*/
+/*  position: fixed;*/
+/*  top: 0;*/
+/*  left: 0;*/
+/*  width: 100%;*/
+/*  height: 100%;*/
+/*  background: rgba(0, 0, 0, 0.5);*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*  align-items: center;*/
+/*}*/
+
+/*.popup-content {*/
+/*  background: white;*/
+/*  padding: 20px;*/
+/*  border-radius: 8px;*/
+/*  width: 500px;*/
+/*}*/
 
 
